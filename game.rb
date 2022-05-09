@@ -14,7 +14,3 @@ class Game
     puts @board
   end
 end
-
-game = Game.new()
-
-game.display_board
