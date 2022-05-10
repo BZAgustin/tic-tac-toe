@@ -15,8 +15,11 @@ class Player
       puts 'Invalid choice'
     else
       game.board[num - 1] = @shape
+
       @moves.push(num)
+
       @turn = false
+
       next_player.turn = true
     end
   end

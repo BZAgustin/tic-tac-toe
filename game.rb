@@ -53,6 +53,7 @@ class Game
     # Run until every space on the board is taken
     while board.any?('-')
       display_board
+
       if p_one.turn
         puts 'Player One\'s Turn (Use 1 to 9):'
         choice = gets.chomp.to_i
@@ -62,6 +63,7 @@ class Game
         choice = gets.chomp.to_i
         p_two.place(self, choice, p_one)
       end
+
       break unless check_winner(p_one, p_two).nil?
     end
   end
