@@ -1,13 +1,22 @@
+# frozen_string_literal: true
+
 class Player
+  attr_accessor :shape, :moves, :turn
 
-  attr_accessor :shape, :moves
-
-  def initialize(shape)
-    @shape = shape
-    moves = []
+  def initialize
+    @shape = nil
+    @moves = []
+    @turn = false
   end
 
-  def place(game, num)
-    game.board[num] = @shape
+  def place(game, num, next_player)
+    if game.board[num - 1] != '-' || ((num - 1).negative? && num - 1 > 8)
+      puts 'Invalid choice'
+    else
+      game.board[num - 1] = @shape
+      @moves.push(num)
+      @turn = false
+      next_player.turn = true
+    end
   end
 end

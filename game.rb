@@ -1,16 +1,82 @@
+# frozen_string_literal: true
+
 class Game
+  attr_accessor :winner_sets, :board
 
-  @@WINNER_COMB = [[1, 2, 3], [4, 5, 6], [7, 8, 9], 
-                   [1, 4, 7], [2, 5, 8], [3, 6, 9],
-                   [1, 5, 9], [3, 5, 7]]
-  
-  attr_accessor :board
-
-  def initialize()
-    @board = Array.new(9)
+  def initialize
+    @winner_sets = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
+                    [1, 4, 7], [2, 5, 8], [3, 6, 9],
+                    [1, 5, 9], [3, 5, 7]]
+    @board = Array.new(9, '-')
   end
 
-  def display_board()
-    puts @board
+  def display_board
+    puts '-------------'
+    puts "| #{@board[0]} | #{@board[1]} | #{@board[2]} |"
+    puts '-------------'
+    puts "| #{@board[3]} | #{@board[4]} | #{@board[5]} |"
+    puts '-------------'
+    puts "| #{@board[6]} | #{@board[7]} | #{@board[8]} |"
+    puts '-------------'
+  end
+
+  def start(p_one, p_two)
+    # Refresh board
+    @board = Array.new(9, '-')
+
+    # Show game title
+    puts "----- TIC TAC TOE -----\n\n"
+
+    pick_shape(p_one, p_two)
+
+    p_one.turn = true
+  end
+
+  def pick_shape(p_one, p_two)
+    puts 'Pick your shape (X or O):'
+
+    player_choice = gets.chomp
+
+    # Validate input
+    while player_choice.downcase != 'x' && player_choice.downcase != 'o'
+      puts 'Invalid choice. Try again'
+      player_choice = gets.chomp.upcase
+    end
+
+    # Assign chosen shape to player
+    p_one.shape = player_choice.upcase
+    p_two.shape = p_one.shape == 'X' ? 'O' : 'X'
+  end
+
+  def begin_turn(p_one, p_two)
+    while board.any?('-')
+      display_board
+      if p_one.turn
+        puts 'Player One\'s Turn (Use 1 to 9):'
+        choice = gets.chomp.to_i
+        p_one.place(self, choice, p_two)
+      else
+        puts 'Player Two\'s Turn (Use 1 to 9):'
+        choice = gets.chomp.to_i
+        p_two.place(self, choice, p_one)
+      end
+      break unless check_winner(p_one, p_two).nil? && board.any?('-')
+    end
+  end
+
+  def check_winner(p_one, p_two)
+    winner_sets.each do |set|
+      next unless (p_one.moves.length > 2 && (set & p_one.moves.sort) == set) ||
+                  (p_two.moves.length > 2 && (set & p_two.moves.sort) == set)
+
+      if p_one.moves.length > 2 && (set & p_one.moves.sort) == set
+        puts 'Player One Wins!'
+        return p_one
+      else
+        puts 'Player Two Wins!'
+        return p_two
+      end
+    end
+    nil
   end
 end
