@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Game
-  attr_accessor :winner_sets, :board
+  attr_reader :winner_sets, :board
 
   def initialize
     @winner_sets = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
