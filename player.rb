@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Player
-  attr_accessor :shape, :moves, :turn
+  attr_accessor :name, :shape, :moves, :turn
 
-  def initialize
+  def initialize(name)
+    @name = name
     @shape = nil
     @moves = []
     @turn = false
